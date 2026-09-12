@@ -1,0 +1,15 @@
+{
+  "name": "Bloco de Notas",
+  "short_name": "Notas",
+  "description": "Bloco de notas rápido, offline e privado.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F2F3EF",
+  "theme_color": "#1F6F5C",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}

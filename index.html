@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<title>Bloco de Notas</title>
+<meta name="description" content="Bloco de notas rápido, offline e privado.">
+<meta name="theme-color" content="#1F6F5C">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ============ TELA: LISTA PRINCIPAL / FAVORITAS / FIXADAS / ARQUIVADAS ============ -->
+  <section id="view-list" class="view active">
+    <div class="topbar">
+      <button class="icon-btn" id="btn-menu" aria-label="Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="14" y2="17"/></svg>
+      </button>
+      <h1 id="list-title">Bloco de Notas</h1>
+      <button class="icon-btn" id="btn-settings-top" aria-label="Configurações">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.04 1.56V21a2 2 0 0 1-4 0v-.09A1.7 1.7 0 0 0 9 19.37a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.63 15a1.7 1.7 0 0 0-1.56-1.04H3a2 2 0 0 1 0-4h.09A1.7 1.7 0 0 0 4.63 9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.63c.63-.26 1.04-.87 1.04-1.56V3a2 2 0 0 1 4 0v.09c0 .69.41 1.3 1.04 1.56.66.28 1.42.14 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06c-.48.45-.62 1.21-.34 1.87.26.63.87 1.04 1.56 1.04H21a2 2 0 0 1 0 4h-.09c-.69 0-1.3.41-1.56 1.04Z"/></svg>
+      </button>
+    </div>
+
+    <div class="search-wrap">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="search" id="search-input" placeholder="Pesquisar notas" autocomplete="off">
+      </div>
+    </div>
+
+    <div class="list-meta">
+      <span class="count" id="list-count">0 anotações</span>
+      <select class="sort-select" id="sort-select" aria-label="Ordenar por">
+        <option value="updated">Última alteração</option>
+        <option value="created">Data de criação</option>
+        <option value="alpha">Alfabética</option>
+      </select>
+    </div>
+
+    <div class="note-list" id="note-list"></div>
+    <div class="empty-state" id="empty-state" style="display:none">
+      <div class="glyph" id="empty-glyph">✎</div>
+      <p id="empty-text">Você ainda não tem anotações. Toque em + para começar.</p>
+    </div>
+
+    <button class="fab" id="btn-new" aria-label="Nova anotação">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    </button>
+  </section>
+
+  <!-- ============ TELA: LIXEIRA ============ -->
+  <section id="view-trash" class="view">
+    <div class="topbar">
+      <button class="icon-btn" id="btn-trash-back" aria-label="Voltar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <h1>Lixeira</h1>
+      <div class="spacer"></div>
+    </div>
+    <div class="list-meta"><span class="count" id="trash-count">0 itens</span></div>
+    <div class="note-list" id="trash-list"></div>
+    <div class="empty-state" id="trash-empty" style="display:none">
+      <div class="glyph">🗑</div>
+      <p>A lixeira está vazia.</p>
+    </div>
+  </section>
+
+  <!-- ============ TELA: EDITOR ============ -->
+  <section id="view-editor" class="view">
+    <div class="editor-topbar">
+      <button class="icon-btn" id="btn-editor-back" aria-label="Voltar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="spacer"></div>
+      <button class="icon-btn" id="btn-editor-favorite" aria-label="Favoritar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><polygon points="12 2 15.09 8.63 22 9.24 16.8 13.97 18.36 21 12 17.3 5.64 21 7.2 13.97 2 9.24 8.91 8.63"/></svg>
+      </button>
+      <button class="icon-btn" id="btn-editor-pin" aria-label="Fixar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v7"/><path d="M8 9h8l1.5 4h-11z"/><path d="M12 13v9"/></svg>
+      </button>
+      <button class="icon-btn" id="btn-editor-share" aria-label="Compartilhar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg>
+      </button>
+      <button class="icon-btn" id="btn-editor-more" aria-label="Mais opções">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="5" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="12" cy="19" r="1.2"/></svg>
+      </button>
+      <button class="save-label" id="btn-editor-save">Salvar</button>
+    </div>
+    <input type="text" id="note-title" placeholder="Título" autocomplete="off">
+    <div class="editor-divider"></div>
+    <div id="note-body" contenteditable="true" data-placeholder="Escreva algo…"></div>
+    <div class="editor-meta" id="editor-meta"></div>
+
+    <div class="format-bar">
+      <button data-cmd="bold" aria-label="Negrito"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h7a3.5 3.5 0 0 1 0 7H6z"/><path d="M6 11h8a3.5 3.5 0 0 1 0 7H6z"/></svg></button>
+      <button data-cmd="italic" aria-label="Itálico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="10" y1="4" x2="18" y2="4"/><line x1="6" y1="20" x2="14" y2="20"/><line x1="13" y1="4" x2="11" y2="20"/></svg></button>
+      <button data-cmd="underline" aria-label="Sublinhado"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 3v8a6 6 0 0 0 12 0V3"/><line x1="5" y1="21" x2="19" y2="21"/></svg></button>
+      <div class="sep"></div>
+      <button data-cmd="heading" aria-label="Título"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4v16M18 4v16M6 12h12"/></svg></button>
+      <button data-cmd="ul" aria-label="Lista com marcadores"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/><line x1="9" y1="6" x2="20" y2="6"/><line x1="9" y1="12" x2="20" y2="12"/><line x1="9" y1="18" x2="20" y2="18"/></svg></button>
+      <button data-cmd="ol" aria-label="Lista numerada"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><text x="2" y="8" font-size="7" fill="currentColor" stroke="none">1</text><text x="2" y="14.5" font-size="7" fill="currentColor" stroke="none">2</text><text x="2" y="21" font-size="7" fill="currentColor" stroke="none">3</text><line x1="9" y1="6" x2="20" y2="6"/><line x1="9" y1="12" x2="20" y2="12"/><line x1="9" y1="18" x2="20" y2="18"/></svg></button>
+      <div class="sep"></div>
+      <button data-cmd="link" aria-label="Link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.07 0l2-2a5 5 0 0 0-7.07-7.07l-1.14 1.14"/><path d="M14 11a5 5 0 0 0-7.07 0l-2 2a5 5 0 0 0 7.07 7.07l1.14-1.14"/></svg></button>
+      <button data-cmd="delete" class="danger-slot" aria-label="Excluir anotação" id="btn-editor-delete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button>
+    </div>
+  </section>
+
+  <!-- ============ TELA: CONFIGURAÇÕES ============ -->
+  <section id="view-settings" class="view">
+    <div class="topbar">
+      <button class="icon-btn" id="btn-settings-back" aria-label="Voltar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <h1>Configurações</h1>
+      <div class="spacer"></div>
+    </div>
+
+    <div class="settings-section">
+      <h2>Aparência</h2>
+      <div class="settings-row" style="display:block">
+        <div class="segmented" id="theme-segmented">
+          <button data-theme="light">Claro</button>
+          <button data-theme="dark">Escuro</button>
+          <button data-theme="system">Sistema</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <h2>Comportamento</h2>
+      <div class="settings-row">
+        <div><div class="label">Confirmar antes de excluir</div></div>
+        <div class="switch" id="switch-confirm-delete"></div>
+      </div>
+      <div class="settings-row">
+        <div><div class="label">Salvamento automático</div></div>
+        <div class="switch" id="switch-autosave"></div>
+      </div>
+      <div class="settings-row">
+        <div class="label">Ordenação padrão</div>
+        <select id="settings-sort">
+          <option value="updated">Última alteração</option>
+          <option value="created">Data de criação</option>
+          <option value="alpha">Alfabética</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <h2>Anotações</h2>
+      <button class="settings-row" style="width:100%" id="btn-goto-archived">
+        <div class="label">Arquivadas</div>
+        <span class="count" id="archived-count-label" style="font-family:var(--mono);color:var(--ink-faint);font-size:0.82rem"></span>
+      </button>
+      <button class="settings-row" style="width:100%" id="btn-goto-trash">
+        <div class="label">Lixeira</div>
+        <span class="count" id="trash-count-label" style="font-family:var(--mono);color:var(--ink-faint);font-size:0.82rem"></span>
+      </button>
+    </div>
+
+    <div class="settings-section">
+      <h2>Dados</h2>
+      <button class="settings-row" style="width:100%" id="btn-export">
+        <div class="label">Exportar anotações</div>
+      </button>
+      <button class="settings-row" style="width:100%" id="btn-import">
+        <div class="label">Importar anotações</div>
+      </button>
+      <input type="file" id="import-file" accept="application/json" hidden>
+    </div>
+
+    <div class="settings-section">
+      <h2>Sobre</h2>
+      <p class="about-text">Bloco de Notas — versão 1.0.<br>Um bloco de notas simples e offline. Todos os dados ficam salvos apenas neste dispositivo; nenhuma conta ou conexão é necessária.</p>
+    </div>
+  </section>
+
+  <!-- ============ DRAWER ============ -->
+  <div class="scrim" id="scrim"></div>
+  <div class="drawer" id="drawer">
+    <div class="brand">Bloco de Notas</div>
+    <nav>
+      <button data-filter="all" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><line x1="8" y1="9" x2="16" y2="9"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="12" y2="17"/></svg>
+        Todas as anotações
+      </button>
+      <button data-filter="favorites" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><polygon points="12 2 15.09 8.63 22 9.24 16.8 13.97 18.36 21 12 17.3 5.64 21 7.2 13.97 2 9.24 8.91 8.63"/></svg>
+        Favoritas
+      </button>
+      <button data-filter="pinned" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v7"/><path d="M8 9h8l1.5 4h-11z"/><path d="M12 13v9"/></svg>
+        Fixadas
+      </button>
+      <button data-filter="archived" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4"/><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+        Arquivadas
+      </button>
+      <button data-filter="trash" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+        Lixeira
+      </button>
+      <button data-filter="settings" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87"/></svg>
+        Configurações
+      </button>
+    </nav>
+  </div>
+
+  <!-- ============ MODAL GENÉRICO ============ -->
+  <div class="modal-scrim center" id="modal-scrim">
+    <div class="modal" id="modal-box">
+      <h3 id="modal-title"></h3>
+      <p id="modal-text"></p>
+      <div class="row" id="modal-actions"></div>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
