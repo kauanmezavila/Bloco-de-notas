@@ -1,0 +1,26 @@
+{
+  "name": "bloco-de-notas",
+  "version": "1.0.0",
+  "description": "Bloco de notas offline, feito em HTML, CSS e JavaScript puro (sem frameworks, sem dependências externas, sem necessidade de internet).",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iqw21623-boop/Bloco-de-notas.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/iqw21623-boop/Bloco-de-notas/issues"
+  },
+  "homepage": "https://github.com/iqw21623-boop/Bloco-de-notas#readme",
+  "dependencies": {
+    "@capacitor/android": "^8.5.2",
+    "@capacitor/cli": "^8.5.2",
+    "@capacitor/core": "^8.5.2"
+  }
+}

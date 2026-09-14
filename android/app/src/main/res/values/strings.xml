@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">bloco-de-notas</string>
+    <string name="title_activity_main">bloco-de-notas</string>
+    <string name="package_name">com.blocodenotas.app</string>
+    <string name="custom_url_scheme">com.blocodenotas.app</string>
+</resources>
